@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using SampleCosmosCore2App.Core;
 
 namespace GettingStartedAsp.NetCore2
 {
@@ -24,6 +25,12 @@ namespace GettingStartedAsp.NetCore2
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            services.AddScoped<Persistence>((s) =>
+            {
+                return new Persistence(
+                    new Uri(Configuration["CosmosDB:URL"]),
+                    Configuration["CosmosDB:PrimaryKey"]);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
